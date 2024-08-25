@@ -1,9 +1,10 @@
 "use client";
 import React from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { mortgageSchema, TMortgageSchema } from "../lib/types";
 import { useEffect } from "react";
+import { getCurrencySymbol } from "../lib/utils";
 
 type InputProps = {
   children?: React.ReactNode;
@@ -36,6 +37,8 @@ const Input = ({
     }
   }, [resetState]);
 
+  const currencySymbol = getCurrencySymbol();
+
   return (
     <section className="h-full w-full ">
       <form
@@ -59,13 +62,22 @@ const Input = ({
                     : "  group-focus-within:bg-Lime"
                 } w-12 h-12 rounded-l-lg`}
               >
-                $
+                {currencySymbol}
               </p>
               <input
                 type="text"
-                {...register("amount", { valueAsNumber: true })}
+                {...register("amount")}
                 id="amount"
-                className={`w-full h-12 cursor-pointer pl-16 py-2 rounded-lg ring-1 ring-Slate900 focus:outline-none ${
+                onChange={(e) => {
+                  const value = e.target.value.replace(/[^0-9.]/g, "");
+                  const numberValue = parseInt(value);
+                  if (!isNaN(numberValue)) {
+                    e.target.value = new Intl.NumberFormat("en-UK").format(
+                      numberValue
+                    );
+                  }
+                }}
+                className={` w-full h-12 cursor-pointer pl-16 py-2 rounded-lg ring-1 ring-Slate900 focus:outline-none ${
                   errors.amount
                     ? "ring-Red"
                     : "  group-active:ring-Lime group-focus-within:ring-Lime"
