@@ -1,3 +1,5 @@
+import { platform } from "os";
+
 export function determineRepayments(
   amount: number,
   term: number,
@@ -68,16 +70,19 @@ export const numberFormat = (value: string) => {
 };
 
 export const getCurrencySymbol = () => {
-  const local = navigator.language;
-  const currency = local === "en-GB" ? "GBP" : "AUD";
-
-  return (0)
-    .toLocaleString(local, {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })
-    .replace(/\d/g, "")
-    .trim();
+  if (typeof navigator === "undefined") {
+    return "";
+  } else {
+    const local = navigator.language;
+    const currency = local === "en-GB" ? "GBP" : "AUD";
+    return (0)
+      .toLocaleString(local, {
+        style: "currency",
+        currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace(/\d/g, "")
+      .trim();
+  }
 };

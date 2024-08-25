@@ -1,6 +1,5 @@
 "use client";
 
-import Input from "./components/input-form";
 import Container from "./components/container";
 import Button from "./components/Button";
 import Image from "next/image";
@@ -11,6 +10,9 @@ import { determineRepayments } from "./lib/utils";
 import SolutionCard from "./components/SolutionCard";
 import { useState } from "react";
 import EmptyCard from "./components/EmptyCard";
+import dynamic from "next/dynamic";
+
+const Input = dynamic(() => import("./components/input-form"), { ssr: false });
 
 export default function Home() {
   const [monthlyRepayment, setMonthlyRepayment] = useState<string>("");
